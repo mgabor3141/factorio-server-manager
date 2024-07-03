@@ -44,14 +44,14 @@ func NewRouter() *mux.Router {
 	apiRouter.Use(AuthMiddleware)
 
 	// use subrouter for calls, that run only, when server is turned off
-	so := apiRouter.NewRoute().Subrouter()
-	so.Use(ServerOffMiddleware)
+	serverOffRouter := apiRouter.NewRoute().Subrouter()
+	serverOffRouter.Use(ServerOffMiddleware)
 
 	apiRouter.NewRoute().Subrouter()
 	for _, route := range apiRoutes {
 		var router *mux.Router
 		if route.ServerOff {
-			router = so
+			router = serverOffRouter
 		} else {
 			router = apiRouter
 		}

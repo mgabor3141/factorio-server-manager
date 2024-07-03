@@ -32,7 +32,7 @@ const CreateUserForm = ({updateUserList}) => {
         <form onSubmit={handleSubmit(onSubmit)}>
             <div className="mb-4">
                 <Label htmlFor="username" text="Username"/>
-                <Input register={register('username',{required: true})}
+                <Input register={register('username', {required: true})}
                        type="text"
                        placeholder="Username"
                 />
@@ -49,7 +49,7 @@ const CreateUserForm = ({updateUserList}) => {
             </div>
             <div className="mb-4">
                 <Label htmlFor="email" text="Email"/>
-                <Input register={register('email',{required: true})}
+                <Input register={register('email', {required: true})}
                        type="email"
                        placeholder="Email"
                 />
@@ -57,7 +57,7 @@ const CreateUserForm = ({updateUserList}) => {
             </div>
             <div className="mb-4">
                 <Label htmlFor="password" text="Password"/>
-                <Input register={register('password',{required: true})}
+                <Input register={register('password', {required: true})}
                        type="password"
                        placeholder="Password"
                 />
@@ -65,12 +65,16 @@ const CreateUserForm = ({updateUserList}) => {
             </div>
             <div className="mb-4">
                 <Label htmlFor="password_confirmation" text="Password Confirmation"/>
-                <Input register={register('password_confirmation',{required: true, validate: conformation => conformation === password})}
+                <Input register={register('password_confirmation', {
+                            required: true,
+                            validate: conformation => conformation === password
+                        })}
 
                        type="password"
                        placeholder="Password Confirmation"
                 />
-                <Error error={errors.password_confirmation} message="Password Confirmation is required and must match the Password"/>
+                <Error error={errors.password_confirmation}
+                       message="Password Confirmation is required and must match the Password"/>
             </div>
             <Button isSubmit={true} type="success">Save</Button>
         </form>
