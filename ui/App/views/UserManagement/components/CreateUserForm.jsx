@@ -7,8 +7,18 @@ import Input from "../../../components/Input";
 import Error from "../../../components/Error";
 
 const CreateUserForm = ({updateUserList}) => {
+    const roleValue = "admin";
 
-    const {register, handleSubmit, formState: {errors}, watch} = useForm();
+    const {
+        register,
+        handleSubmit,
+        formState: {errors},
+        watch
+    } = useForm({
+        values: {
+            role: roleValue,
+        }
+    });
     const password = watch('password');
 
     const onSubmit = async (data) => {
@@ -29,12 +39,10 @@ const CreateUserForm = ({updateUserList}) => {
                 <Error error={errors.username} message="Username is required"/>
             </div>
             <div className="mb-4">
-                <Label htmlFor="role" text="Role" />
-                <input className="shadow appearance-none border w-full py-2 px-3 text-black"
-                       {...register('role',{required: true})}
-                       value="admin"
+                <Label htmlFor="role" text="Role"/>
+                <Input register={register('role', {required: true})}
+                       value={roleValue}
                        disabled={true}
-                       type="text"
                        placeholder="Role"
                 />
                 <Error error={errors.role} message="Role is required"/>
