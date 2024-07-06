@@ -8,7 +8,6 @@ const Select = ({register, options, className = "", defaultValue = ""}) => {
         <div className={`${className} relative`}>
         <select
             className="shadow appearance-none border w-full py-2 px-3 text-black"
-            name={name}
             {...register}
             value={value}
             onChange={optionElement => setValue(optionElement.target.value)}

@@ -9,17 +9,19 @@ import modsResource from "../../../../api/resources/mods";
 const LoadMods = ({refreshMods}) => {
 
     const [saves, setSaves] = useState([]);
-    const {register, handleSubmit} = useForm();
+    const {register, reset, handleSubmit} = useForm();
     const [isLoading, setIsLoading] = useState(false);
 
     useEffect(() => {
         (async () => {
             setSaves(await savesResource.list());
+            reset();
         })();
     }, []);
 
     const loadMods = data => {
         setIsLoading(true)
+        console.log(data)
         savesResource.mods(data.save)
             .then(({mods}) => {
                 modsResource.portal.installMultiple(mods)
