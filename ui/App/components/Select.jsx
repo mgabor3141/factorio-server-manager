@@ -1,8 +1,14 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 
-const Select = ({register, options, className = "", defaultValue = ""}) => {
+const Select = ({register, options, className = "", defaultValue = "", disabled = undefined}) => {
 
     const [value, setValue] = useState(defaultValue);
+
+    useEffect(() => {
+        if (value === "") {
+            setValue(defaultValue)
+        }
+    });
 
     return (
         <div className={`${className} relative`}>
@@ -10,6 +16,7 @@ const Select = ({register, options, className = "", defaultValue = ""}) => {
             className="shadow appearance-none border w-full py-2 px-3 text-black"
             {...register}
             value={value}
+            disabled={disabled}
             onChange={optionElement => setValue(optionElement.target.value)}
         >
             {options.map(option => <option value={option.value} key={option.value}>{option.name}</option>)}

@@ -11,10 +11,15 @@ const LoadMods = ({refreshMods}) => {
     const [saves, setSaves] = useState([]);
     const {register, reset, handleSubmit} = useForm();
     const [isLoading, setIsLoading] = useState(false);
+    const [isDisabled, setIsDisabled] = useState(true);
 
     useEffect(() => {
         (async () => {
-            setSaves(await savesResource.list());
+            const s = await savesResource.list()
+            setSaves(s);
+            if (s.length > 0) {
+                setIsDisabled(false);
+            }
             reset();
         })();
     }, []);
@@ -40,12 +45,13 @@ const LoadMods = ({refreshMods}) => {
             <Select
                 register={register('save')}
                 className="mb-4"
+                disabled={isDisabled}
                 options={saves?.map(save => new Object({
                     name: save.name,
                     value: save.name
                 }))}
             />
-            <Button isSubmit={true} isLoading={isLoading}>Load</Button>
+            <Button isSubmit={true} isDisabled={isDisabled} isLoading={isLoading}>Load</Button>
         </form>
     )
 }
