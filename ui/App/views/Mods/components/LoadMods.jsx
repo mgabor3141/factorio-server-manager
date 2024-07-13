@@ -7,6 +7,7 @@ import Button from "../../../components/Button";
 import modsResource from "../../../../api/resources/mods";
 import modResource from "../../../../api/resources/mods";
 import FactorioLogin from "./AddMod/components/FactorioLogin";
+import ConfirmDialog from "../../../components/ConfirmDialog";
 
 const LoadMods = ({refreshMods}) => {
 
@@ -15,6 +16,7 @@ const LoadMods = ({refreshMods}) => {
     const [isLoading, setIsLoading] = useState(false);
     const [isDisabled, setIsDisabled] = useState(true);
     const [isFactorioAuthenticated, setIsFactorioAuthenticated] = useState(false);
+    const [loadModsData, setLoadModsData] = useState(undefined);
 
     useEffect(() => {
         (async () => {
@@ -29,23 +31,30 @@ const LoadMods = ({refreshMods}) => {
         })();
     }, []);
 
-    const loadMods = data => {
-        setIsLoading(true)
-        console.log(data)
-        savesResource.mods(data.save)
-            .then(({mods}) => {
-                modsResource.portal.installMultiple(mods)
-                    .then(() => {
-                        refreshMods()
-                        window.flash(`Mods are loaded from save file ${data.save}.`, "green")
-                    })
-                    .finally(() => setIsLoading(false))
-            })
-            .catch(() => setIsLoading(false))
+    const loadModsRequested = data => {
+        setIsLoading(true);
+        setLoadModsData(data);
+    }
+
+    const loadMods = async data => {
+        await modResource.deleteAll();
+        const {mods} = await savesResource.mods(data.save).catch(() => {
+            setIsLoading(false);
+            setLoadModsData(undefined);
+        });
+
+        await modResource.portal.installMultiple(mods)
+            .then(() => {
+                refreshMods();
+                window.flash(`Mods are loaded from save file ${data.save}.`, "green");
+            }).finally(() => {
+                setIsLoading(false);
+                setLoadModsData(undefined);
+            });
     }
 
     return isFactorioAuthenticated
-        ? <form onSubmit={handleSubmit(loadMods)}>
+        ? <form onSubmit={handleSubmit(loadModsRequested)}>
             <Label text="Save" htmlFor="save"/>
             <Select
                 register={register('save')}
@@ -57,6 +66,16 @@ const LoadMods = ({refreshMods}) => {
                 }))}
             />
             <Button isSubmit={true} isDisabled={isDisabled} isLoading={isLoading}>Load</Button>
+            <ConfirmDialog
+                title="Load Mods from Save"
+                content={`Loading the Mods from Save "${loadModsData?.save}" will remove all currently installed Mods.`}
+                isOpen={loadModsData !== undefined}
+                close={() => {
+                    setIsLoading(false);
+                    setLoadModsData(undefined);
+                }}
+                onSuccess={() => loadMods(loadModsData)}
+            />
         </form>
         : <FactorioLogin setIsFactorioAuthenticated={setIsFactorioAuthenticated}/>
 }
