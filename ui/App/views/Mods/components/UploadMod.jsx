@@ -32,6 +32,7 @@ const UploadMod = ({refetchInstalledMods}) => {
                     onChange={e => setFileName(e.currentTarget.files[0].name)}
                     id="mod_file"
                     type="file"
+                    accept="application/zip,.zip,.dat,.json"
                 />
                 <div className="px-2 py-2">{fileName}</div>
             </div>
