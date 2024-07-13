@@ -5,6 +5,8 @@ import Label from "../../../components/Label";
 import {useForm} from "react-hook-form";
 import Button from "../../../components/Button";
 import modsResource from "../../../../api/resources/mods";
+import modResource from "../../../../api/resources/mods";
+import FactorioLogin from "./AddMod/components/FactorioLogin";
 
 const LoadMods = ({refreshMods}) => {
 
@@ -12,9 +14,12 @@ const LoadMods = ({refreshMods}) => {
     const {register, reset, handleSubmit} = useForm();
     const [isLoading, setIsLoading] = useState(false);
     const [isDisabled, setIsDisabled] = useState(true);
+    const [isFactorioAuthenticated, setIsFactorioAuthenticated] = useState(false);
 
     useEffect(() => {
         (async () => {
+            setIsFactorioAuthenticated(await modResource.portal.status())
+
             const s = await savesResource.list()
             setSaves(s);
             if (s.length > 0) {
@@ -39,8 +44,8 @@ const LoadMods = ({refreshMods}) => {
             .catch(() => setIsLoading(false))
     }
 
-    return (
-        <form onSubmit={handleSubmit(loadMods)}>
+    return isFactorioAuthenticated
+        ? <form onSubmit={handleSubmit(loadMods)}>
             <Label text="Save" htmlFor="save"/>
             <Select
                 register={register('save')}
@@ -53,7 +58,7 @@ const LoadMods = ({refreshMods}) => {
             />
             <Button isSubmit={true} isDisabled={isDisabled} isLoading={isLoading}>Load</Button>
         </form>
-    )
+        : <FactorioLogin setIsFactorioAuthenticated={setIsFactorioAuthenticated}/>
 }
 
 export default LoadMods;
