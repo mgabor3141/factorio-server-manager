@@ -84,7 +84,7 @@ const Controls = ({serverStatus}) => {
                                 <Input
                                     defaultValue={"0.0.0.0"}
                                     disabled={isDisabled}
-                                    register={register('ip',{required: true, pattern: '^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$'})}
+                                    register={register('ip',{required: true, pattern: /^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/})}
                                 />
                                 <Error error={errors.ip} message="IP is required and must be valid."/>
                             </div>
@@ -93,11 +93,12 @@ const Controls = ({serverStatus}) => {
                                 <Input
                                     type="number"
                                     min={1}
+                                    max={65535}
                                     defaultValue={"34197"}
                                     disabled={isDisabled}
-                                    register={register('port',{required: true})}
+                                    register={register('port',{required: true, min: 1, max: 65535})}
                                 />
-                                <Error error={errors.port} message="Port is required"/>
+                                <Error error={errors.port} message="Port is required within range 1-65535"/>
                             </div>
                             <div className="lg:w-1/5 mb-2 mr-0 lg:mr-4">
                                 <div className="font-bold">Factorio Version</div>

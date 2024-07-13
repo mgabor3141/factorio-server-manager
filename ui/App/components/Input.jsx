@@ -8,6 +8,7 @@ const Input = ({
                    hasAutoComplete = true,
                    onKeyDown = () => undefined,
                    min = undefined,
+                   max = undefined,
                    value = undefined,
                    disabled = false
                }) => {
@@ -21,6 +22,7 @@ const Input = ({
             autoComplete={hasAutoComplete ? "on" : "off"}
             defaultValue={defaultValue}
             min={min}
+            max={max}
             value={value}
             disabled={disabled}
         />
