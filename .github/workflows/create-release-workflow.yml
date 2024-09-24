@@ -64,5 +64,5 @@ jobs:
           context: ./docker/
           file: ./docker/Dockerfile-local
           push: true
-          tags: ofsm/ofsm:latest,ofsm/ofsm:${{ steps.tag_name.outputs.tag }}
+          tags: mgabor3141/ofsm:latest,mgabor3141/ofsm:${{ steps.tag_name.outputs.tag }}
 
